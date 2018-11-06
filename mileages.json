@@ -1,0 +1,192 @@
+[
+{
+    "model": "page.mileage",
+    "pk": 1,
+    "fields": {
+        "filial": 2,
+        "year": "2017",
+        "loko": 4,
+        "mileage": 0
+    }
+},
+{
+    "model": "page.mileage",
+    "pk": 2,
+    "fields": {
+        "filial": 2,
+        "year": "2017",
+        "loko": 2,
+        "mileage": 58810
+    }
+},
+{
+    "model": "page.mileage",
+    "pk": 3,
+    "fields": {
+        "filial": 2,
+        "year": "2017",
+        "loko": 3,
+        "mileage": 0
+    }
+},
+{
+    "model": "page.mileage",
+    "pk": 4,
+    "fields": {
+        "filial": 2,
+        "year": "2017",
+        "loko": 5,
+        "mileage": 3234579
+    }
+},
+{
+    "model": "page.mileage",
+    "pk": 5,
+    "fields": {
+        "filial": 2,
+        "year": "2017",
+        "loko": 6,
+        "mileage": 6880832
+    }
+},
+{
+    "model": "page.mileage",
+    "pk": 6,
+    "fields": {
+        "filial": 2,
+        "year": "2017",
+        "loko": 7,
+        "mileage": 1529073
+    }
+},
+{
+    "model": "page.mileage",
+    "pk": 7,
+    "fields": {
+        "filial": 1,
+        "year": "2017",
+        "loko": 2,
+        "mileage": 705726
+    }
+},
+{
+    "model": "page.mileage",
+    "pk": 8,
+    "fields": {
+        "filial": 1,
+        "year": "2017",
+        "loko": 2,
+        "mileage": 705726
+    }
+},
+{
+    "model": "page.mileage",
+    "pk": 9,
+    "fields": {
+        "filial": 1,
+        "year": "2017",
+        "loko": 8,
+        "mileage": 823347
+    }
+},
+{
+    "model": "page.mileage",
+    "pk": 10,
+    "fields": {
+        "filial": 1,
+        "year": "2017",
+        "loko": 9,
+        "mileage": 176431
+    }
+},
+{
+    "model": "page.mileage",
+    "pk": 11,
+    "fields": {
+        "filial": 1,
+        "year": "2017",
+        "loko": 10,
+        "mileage": 1764316
+    }
+},
+{
+    "model": "page.mileage",
+    "pk": 12,
+    "fields": {
+        "filial": 1,
+        "year": "2017",
+        "loko": 11,
+        "mileage": 113108632
+    }
+},
+{
+    "model": "page.mileage",
+    "pk": 13,
+    "fields": {
+        "filial": 1,
+        "year": "2017",
+        "loko": 12,
+        "mileage": 3078035
+    }
+},
+{
+    "model": "page.mileage",
+    "pk": 14,
+    "fields": {
+        "filial": 1,
+        "year": "2017",
+        "loko": 13,
+        "mileage": 16050723
+    }
+},
+{
+    "model": "page.mileage",
+    "pk": 15,
+    "fields": {
+        "filial": 3,
+        "year": "2017",
+        "loko": 2,
+        "mileage": 4762867
+    }
+},
+{
+    "model": "page.mileage",
+    "pk": 16,
+    "fields": {
+        "filial": 3,
+        "year": "2017",
+        "loko": 14,
+        "mileage": 7554892
+    }
+},
+{
+    "model": "page.mileage",
+    "pk": 17,
+    "fields": {
+        "filial": 3,
+        "year": "2017",
+        "loko": 11,
+        "mileage": 17698701
+    }
+},
+{
+    "model": "page.mileage",
+    "pk": 18,
+    "fields": {
+        "filial": 3,
+        "year": "2017",
+        "loko": 5,
+        "mileage": 41122421
+    }
+},
+{
+    "model": "page.mileage",
+    "pk": 19,
+    "fields": {
+        "filial": 3,
+        "year": "2018",
+        "loko": 6,
+        "mileage": 376101
+    }
+}
+]

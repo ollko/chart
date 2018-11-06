@@ -1,0 +1,199 @@
+{% extends "base/__base.html" %}
+
+{% load static %}
+
+{% block stylesheets %}
+    {{ block.super }}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'css/normalize.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/ion.rangeSlider.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/ion.rangeSlider.skinFlat.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/my.css' %}" />
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="box box-default">
+    <form class="my-prop-form">
+        <div class="box-header with-border">
+            <h3 class="box-title">Выберите исходные данные для отчета:</h3>
+
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            </div>
+        </div>
+            <!-- /.box-header -->
+        <div class="box-body">
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Выберите филиалы</label>
+                        <select id="multiple-select-filial" class="form-control select2" multiple="multiple" data-placeholder="Выберите филиалы" style="width: 100%;">
+                            {% for filial in filials %}
+                            <option value="{{ filial.slug }}">{{ filial.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Выберите локомотивы(марки)</label>
+                        <select id="multiple-select-loko" class="form-control select2" multiple="multiple" data-placeholder="Выберите локомотивы(марки)" style="width: 100%;">
+                            {% for loko in lokos %}
+                            <option value='{{ loko.slug }}'>{{ loko.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <label>Выберите период времени</label>
+                    <input type="text"
+                        id="year-slider"
+                        name="example_name"
+                        value=""
+                        data-min    = "{{ year1 }}",
+                        data-max    = "{{ year2 }}",
+                        data-from   = "{{ year1 }}",
+                        data-to     = "{{ year2 }}"/>
+                </div>
+            </div>
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer">
+            <button type="submit" class="btn btn-primary">Пересчитать график</button>
+        </div>
+    </form>
+</div>
+
+<canvas id="myChart" width="400" height="400"></canvas>
+
+{% endblock %}
+
+
+{% block javascript %}
+    {{ block.super }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <script src="{% static 'js/ion.rangeSlider.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // отображаеи select2 поля
+            $('.select2').select2();
+             // отображаеи slider
+            $("#year-slider").ionRangeSlider({
+                hide_min_max: true,
+                keyboard: true,
+                type: 'double',
+                step: 1,
+                postfix: " год",
+                grid: true,
+                grid_num: 37,
+                input_values_separator: ','
+            });
+
+            var years =
+                [
+                    '2017','2018','2019','2020','2021','2022','2023','2024','2025','2026',
+                    '2027','2028','2029','2030','2031','2032','2033','2034','2035','2036',
+                    '2037','2038','2039','2040','2041','2042','2043','2044','2045','2046',
+                    '2047','2048','2049','2050','2051','2052','2053','2054',
+                ];
+            var endpoint = '/api/';
+            getChart(years, endpoint);
+
+            var $myForm = $(".my-prop-form");
+            $myForm.submit(function(event){
+                event.preventDefault();
+                var yearsFromForm = $("#year-slider").val();
+                var regionsFromForm = $("#multiple-select-filial").val();
+                var lokosFromForm = $("#multiple-select-loko").val();
+
+                console.log(yearsFromForm);
+                console.log($("#multiple-select-filial").val());
+                console.log($("#multiple-select-loko").val())
+
+                if ( yearsFromForm ) {
+                    endpoint += '?years=' + yearsFromForm;
+                    yearList = yearsFromForm.split(',').map(function(item){
+                        return Number(item)
+                    });
+                    var years = [];
+                    for (var i = yearList[0]; i<=yearList[1]; i++){
+                        years.push(String(i));
+                    }
+                };
+                if ( regionsFromForm ){
+                    endpoint += '&filial=' + regionsFromForm;
+                };
+                if ( regionsFromForm ){
+                    endpoint += '&loko=' + lokosFromForm;
+                };
+                console.log('endpoint=',endpoint);
+                getChart(years, endpoint);
+                endpoint = '/api/';
+            });
+        });
+
+        function getChart(years, endpoint) {
+            $.ajax({
+                method: "GET",
+                url: endpoint,
+                success: function(data){
+                    var revanue_list = years.map(function(years_item){
+                        var year_data = data.filter(function(data_item){
+                            return data_item.year === years_item
+                        });
+                        return year_data.reduce(function(sum, current) {
+                            return sum + current.revenue;
+                        }, 0);
+                    });
+                    if ( myChart ){
+                        myChart.destroy();
+                        console.log(destroy);
+                    };
+                    var ctx = document.getElementById("myChart");
+
+                    var myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: years,
+                            datasets: [{
+                                label: 'Отчет о выручке',
+                                data: revanue_list,
+                                // backgroundColor: '#f14140'
+                                backgroundColor: 'rgba(54, 162, 235, 0.4)',
+                                borderColor:     'rgba(54, 162, 235, 1)',
+                                borderWidth: 1
+                            }],
+                        },
+                        options: {
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true
+                                    }
+                                }]
+                            },
+                            legend: {
+                                labels: {
+                                    fontSize: 18
+                                }
+                            }
+                        }
+                    });
+                },
+                error: function(error_data){
+                    console.log("error")
+                    console.log(error_data)
+                }
+            });
+        }
+    </script>
+
+{% endblock %}
+

@@ -1,0 +1,12 @@
+.select2-container--default .select2-selection--multiple .select2-selection__choice{
+	background-color: #2c95d2;
+    border: 1px solid #3e6d9e;
+}
+.skin-red-light .main-header .navbar {
+    background-color: #f14140;
+}
+.skin-red-light .main-header .logo {
+    background-color: #f14140;
+    color: #fff;
+    border-bottom: 0 solid transparent;
+}
