@@ -83,7 +83,9 @@
     <script>
         $(document).ready(function() {
             // отображаеи select2 поля
-            $('.select2').select2();
+            $('.select2').select2({
+                placeholder: "Все",
+            });
              // отображаеи slider
             $("#year-slider").ionRangeSlider({
                 hide_min_max: true,
@@ -96,6 +98,36 @@
                 input_values_separator: ','
             });
 
+            
+            var ctx = document.getElementById("myChart");
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['0'],
+                    datasets: [{
+                        label: '',
+                        data: [0],
+                        // backgroundColor: '#f14140'
+                        backgroundColor: 'rgba(54, 162, 235, 0.4)',
+                        borderColor:     'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }],
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    },
+                    legend: {
+                        labels: {
+                            fontSize: 18
+                        }
+                    }
+                }
+            });
             var years =
                 [
                     '2017','2018','2019','2020','2021','2022','2023','2024','2025','2026',
@@ -104,18 +136,47 @@
                     '2047','2048','2049','2050','2051','2052','2053','2054',
                 ];
             var endpoint = '/api/';
-            getChart(years, endpoint);
+            $.ajax({
+                method: "GET",
+                url: endpoint,
+                // async: false,
+                success: function(data){
+                    var revanue_list = years.map(function(years_item){
+                        var year_data = data.filter(function(data_item){
+                            return data_item.year === years_item
+                        });
+                        return year_data.reduce(function(sum, current) {
+                            return sum + current.revenue;
+                        }, 0);
+                    });
+                    // console.log('revanue_list=',revanue_list);
+                    var label = 'Отчет о выручке (все филиалы, все оборудование)'
+                    addData(myChart, label, years, revanue_list);
+                },
+                error: function(error_data){
+                    console.log("error")
+                    console.log(error_data)
+                }
+            });
+            function addData(chart, label, labels, data) {
+                chart.data.labels = labels;
+                chart.data.datasets[0].label = label;
+                chart.data.datasets[0].data = data;
+                chart.update();
+            }
+
 
             var $myForm = $(".my-prop-form");
             $myForm.submit(function(event){
                 event.preventDefault();
+                var endpoint = '/api/';
                 var yearsFromForm = $("#year-slider").val();
                 var regionsFromForm = $("#multiple-select-filial").val();
                 var lokosFromForm = $("#multiple-select-loko").val();
 
-                console.log(yearsFromForm);
-                console.log($("#multiple-select-filial").val());
-                console.log($("#multiple-select-loko").val())
+                // console.log(yearsFromForm);
+                // console.log($("#multiple-select-filial").val());
+                // console.log($("#multiple-select-loko").val())
 
                 if ( yearsFromForm ) {
                     endpoint += '?years=' + yearsFromForm;
@@ -130,17 +191,11 @@
                 if ( regionsFromForm ){
                     endpoint += '&filial=' + regionsFromForm;
                 };
-                if ( regionsFromForm ){
+                if ( lokosFromForm ){
                     endpoint += '&loko=' + lokosFromForm;
                 };
-                console.log('endpoint=',endpoint);
-                getChart(years, endpoint);
-                endpoint = '/api/';
-            });
-        });
-
-        function getChart(years, endpoint) {
-            $.ajax({
+                // console.log('endpoint=',endpoint);
+                $.ajax({
                 method: "GET",
                 url: endpoint,
                 success: function(data){
@@ -152,47 +207,19 @@
                             return sum + current.revenue;
                         }, 0);
                     });
-                    if ( myChart ){
-                        myChart.destroy();
-                        console.log(destroy);
-                    };
-                    var ctx = document.getElementById("myChart");
-
-                    var myChart = new Chart(ctx, {
-                        type: 'bar',
-                        data: {
-                            labels: years,
-                            datasets: [{
-                                label: 'Отчет о выручке',
-                                data: revanue_list,
-                                // backgroundColor: '#f14140'
-                                backgroundColor: 'rgba(54, 162, 235, 0.4)',
-                                borderColor:     'rgba(54, 162, 235, 1)',
-                                borderWidth: 1
-                            }],
-                        },
-                        options: {
-                            scales: {
-                                yAxes: [{
-                                    ticks: {
-                                        beginAtZero: true
-                                    }
-                                }]
-                            },
-                            legend: {
-                                labels: {
-                                    fontSize: 18
-                                }
-                            }
-                        }
-                    });
+                    // console.log('revanue_list=',revanue_list);
+                    var label = 'Отчет о выручке по выбранным параметрам'
+                    addData(myChart, label, years, revanue_list);
                 },
                 error: function(error_data){
                     console.log("error")
                     console.log(error_data)
                 }
             });
-        }
+            });
+        });
+
+        
     </script>
 
 {% endblock %}
