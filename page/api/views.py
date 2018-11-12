@@ -17,16 +17,16 @@ class MileageListAPIView(ListAPIView):
         if query_filial:
             print('filial=',query_filial)
             f = query_filial.split(',')
-            print('f=',f)
+            # print('f=',f)
             queryset_list = queryset_list.filter(
                 filial__slug__in = f
             )
         query_loko = self.request.GET.get('loko')
         if query_loko:
-            print('loko=',query_loko)
+            # print('loko=',query_loko)
 
             l = query_loko.split(',')
-            print('l=',l)
+            # print('l=',l)
             queryset_list = queryset_list.filter(
                 loko__slug__in = l
             )

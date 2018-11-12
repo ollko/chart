@@ -69,7 +69,9 @@
     </form>
 </div>
 
-<canvas id="myChart" width="400" height="400"></canvas>
+    <canvas id="myChart" width="400" height="120"></canvas>
+
+
 
 {% endblock %}
 
@@ -99,6 +101,7 @@
 
             
             var ctx = document.getElementById("myChart");
+            
             var myChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -120,6 +123,7 @@
                             }
                         }]
                     },
+                    responsive: true,
                     legend: {
                         labels: {
                             fontSize: 18
