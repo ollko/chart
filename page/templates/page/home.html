@@ -26,7 +26,6 @@
         </div>
             <!-- /.box-header -->
         <div class="box-body">
-            
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
@@ -194,7 +193,7 @@
                 if ( lokosFromForm ){
                     endpoint += '&loko=' + lokosFromForm;
                 };
-                // console.log('endpoint=',endpoint);
+                console.log('endpoint=',endpoint);
                 $.ajax({
                 method: "GET",
                 url: endpoint,
@@ -207,7 +206,7 @@
                             return sum + current.revenue;
                         }, 0);
                     });
-                    // console.log('revanue_list=',revanue_list);
+                    console.log('revanue_list=',revanue_list);
                     var label = 'Отчет о выручке по выбранным параметрам'
                     addData(myChart, label, years, revanue_list);
                 },

@@ -26,7 +26,7 @@ for j in range(2, len(mileage_sheet[0])):
             i = {
                 'filial': get_pk(filials, row[0]),
                 'loko': get_pk(lokos, row[1]),
-                'mileage': row[2],
+                'mileage': row[j],
                 'year': mileage_sheet[0][j],
             }
             x.append(i)

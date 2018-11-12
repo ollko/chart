@@ -24,7 +24,7 @@ class Loko(models.Model):
         return self.name
 
     class Meta:
-        ordering = ('id',)
+        ordering = ('name',)
         verbose_name = 'Локомотив'
         verbose_name_plural = 'Локомотивы со ставками за км'
 
@@ -38,7 +38,7 @@ class Filial(models.Model):
         return self.name
 
     class Meta:
-        ordering = ('id',)
+        ordering = ('name',)
         verbose_name = 'Филиал'
         verbose_name_plural = 'Филиалы'
 
